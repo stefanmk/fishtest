@@ -1,11 +1,26 @@
 Setting up the server
 
+yum install git
+
+sudo yum install epel-release
+sudo yum install python-pip
 sudo pip install pyramid
 sudo pip install waitress
 sudo pip install boto
 sudo pip install requests
+sudo yum group install "Development Tools"
+sudo yum install python-zmq
+sudo yum install gcc python-devel
+sudo pip install numpy
+sudo pip install stats
+sudo yum install numpy scipy python-matplotlib ipython python-pandas sympy python-nose
+
+echo hallo >/root/fishtest.secret
+
 
 Installing Mongo:
+
+sudo yum install -y mongodb-org
 
 Install latest MongoDB x64 to ~/mongodb
 Start MongoDB:
