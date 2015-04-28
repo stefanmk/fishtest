@@ -129,7 +129,7 @@ def build(worker_dir, sha, repo_url, destination, concurrency):
   else:
     subprocess.check_call(MAKE_CMD + ' -j %s' % (concurrency), shell=True)
 
-  shutil.move('stockfish'+ EXE_SUFFIX, destination)
+  shutil.move('engine'+ EXE_SUFFIX, destination)
   os.chdir(worker_dir)
   shutil.rmtree(tmp_dir)
 
@@ -226,7 +226,7 @@ def run_game(p, remote, result, spsa, spsa_tuning, tc_limit):
       break
 
     # Parse line like this:
-    # Finished game 1 (stockfish vs base): 0-1 {White disconnects}
+    # Finished game 1 (engine vs base): 0-1 {White disconnects}
     if 'disconnects' in line or 'connection stalls' in line:
       result['stats']['crashes'] += 1
 
@@ -234,7 +234,7 @@ def run_game(p, remote, result, spsa, spsa_tuning, tc_limit):
       result['stats']['time_losses'] += 1
 
     # Parse line like this:
-    # Score of stockfish vs base: 0 - 0 - 1  [0.500] 1
+    # Score of engine vs base: 0 - 0 - 1  [0.500] 1
     if 'Score' in line:
       chunks = line.split(':')
       chunks = chunks[1].split()
@@ -357,7 +357,7 @@ def run_games(worker_info, password, remote, run, task_id):
   if not os.path.exists(testing_dir):
     os.makedirs(testing_dir)
 
-  new_engine = os.path.join(testing_dir, 'stockfish' + EXE_SUFFIX)
+  new_engine = os.path.join(testing_dir, 'engine' + EXE_SUFFIX)
   base_engine = os.path.join(testing_dir, 'base' + EXE_SUFFIX)
   cutechess = os.path.join(testing_dir, 'cutechess-cli' + EXE_SUFFIX)
 
@@ -438,7 +438,7 @@ def run_games(worker_info, password, remote, run, task_id):
     cmd = [ cutechess, '-repeat', '-rounds', str(games_to_play), '-tournament', 'gauntlet'] + pgnout + \
           ['-resign', 'movecount=3', 'score=400', '-draw', 'movenumber=34',
            'movecount=8', 'score=20', '-concurrency', str(games_concurrency)] + pgn_cmd + \
-          ['-engine', 'name=stockfish', 'cmd=stockfish'] + new_options + ['_spsa_'] + \
+          ['-engine', 'name=engine', 'cmd=engine'] + new_options + ['_spsa_'] + \
           ['-engine', 'name=base', 'cmd=base'] + base_options + ['_spsa_'] + \
           ['-each', 'proto=uci', 'tc=%s' % (scaled_tc)] + nodestime_cmd + threads_cmd + book_cmd
 

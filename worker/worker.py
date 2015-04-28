@@ -25,7 +25,7 @@ def setup_config_file(config_file):
   config.read(config_file)
 
   defaults = [('login', 'username', ''), ('login', 'password', ''),
-              ('parameters', 'host', 'tests.stockfishchess.org'),
+              ('parameters', 'host', 'fishtest.shredderchess.com'),
               ('parameters', 'port', '80'),
               ('parameters', 'concurrency', '3')]
 
@@ -63,7 +63,7 @@ def worker(worker_info, password, remote):
 
     if req['version'] > WORKER_VERSION:
       print 'Updating worker version to %d' % (req['version'])
-      update()
+      #update()
 
     req = requests.post(remote + '/api/request_task', data=json.dumps(payload), headers={'Content-type': 'application/json'}, timeout=HTTP_TIMEOUT)
     req = json.loads(req.text)
@@ -126,10 +126,6 @@ def main():
     else:
       sys.stderr.write('%s [username] [password]\n' % (sys.argv[0]))
       sys.exit(1)
-
-  # Re-route old IP
-  if '54.235.120.254' in options.host:
-    options.host = 'tests.stockfishchess.org'
 
   # Write command line parameters to the config file
   config.set('login', 'username', args[0])

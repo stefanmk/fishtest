@@ -2,7 +2,7 @@
 
 <link href="/css/flags.css" rel="stylesheet">
 
-<h2>Stockfish Testing Queue</h2>
+<h2>Engine Testing Queue</h2>
 
 %if page_idx == 0:
 
