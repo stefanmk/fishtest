@@ -110,15 +110,17 @@ def build(worker_dir, sha, repo_url, destination, concurrency):
   tmp_dir = tempfile.mkdtemp()
   os.chdir(tmp_dir)
 
-  with open('sf.gz', 'wb+') as f:
-    f.write(requests.get(github_api(repo_url) + '/zipball/' + sha, timeout=HTTP_TIMEOUT).content)
-  zip_file = ZipFile('sf.gz')
+  with open('engine.gz', 'wb+') as f:
+    f.write(requests.get(github_api(repo_url) + '/zipball/' + sha, timeout=HTTP_TIMEOUT, auth=('13234b8dbf231b7a42c38f9d00352fc4cc5a5773', 'x-oauth-basic')).content)
+  zip_file = ZipFile('engine.gz')
   zip_file.extractall()
   zip_file.close()
 
   for name in zip_file.namelist():
-    if name.endswith('/src/'):
-      src_dir = name
+    if name.endswith('custom_make.txt'):
+      src_dir = name.replace('custom_make.txt','')
+      break
+
   os.chdir(src_dir)
 
   custom_make = os.path.join(worker_dir, 'custom_make.txt')
