@@ -27,6 +27,11 @@ old_stats = {'wins':0, 'losses':0, 'draws':0, 'crashes':0, 'time_losses':0}
 
 IS_WINDOWS = 'windows' in platform.system().lower()
 
+github_token = ""
+with open('../github_token.txt') as f:
+  github_token = f.read().strip()
+  print('github token read')
+  
 def is_windows_64bit():
   if 'PROCESSOR_ARCHITEW6432' in os.environ:
     return True
@@ -68,8 +73,8 @@ def verify_signature(engine, signature, remote, payload, concurrency):
     bench_sig = ''
     print 'Verifying signature of %s ...' % (os.path.basename(engine))
     with open(os.devnull, 'wb') as f:
-      p = subprocess.Popen([engine, 'bench'], stderr=subprocess.PIPE, stdout=f, universal_newlines=True)
-    for line in iter(p.stderr.readline,''):
+      p = subprocess.Popen([engine, 'bench'], stdout=subprocess.PIPE, stderr=f, universal_newlines=True)
+    for line in iter(p.stdout.readline,''):
       if 'Nodes searched' in line:
         bench_sig = line.split(': ')[1].strip()
       if 'Nodes/second' in line:
@@ -109,9 +114,9 @@ def build(worker_dir, sha, repo_url, destination, concurrency):
   """Download and build sources in a temporary directory then move exe to destination"""
   tmp_dir = tempfile.mkdtemp()
   os.chdir(tmp_dir)
-
+  
   with open('engine.gz', 'wb+') as f:
-    f.write(requests.get(github_api(repo_url) + '/zipball/' + sha, timeout=HTTP_TIMEOUT, auth=('13234b8dbf231b7a42c38f9d00352fc4cc5a5773', 'x-oauth-basic')).content)
+    f.write(requests.get(github_api(repo_url) + '/zipball/' + sha, timeout=HTTP_TIMEOUT, auth=(github_token, 'x-oauth-basic')).content)
   zip_file = ZipFile('engine.gz')
   zip_file.extractall()
   zip_file.close()
@@ -123,7 +128,7 @@ def build(worker_dir, sha, repo_url, destination, concurrency):
 
   os.chdir(src_dir)
 
-  custom_make = os.path.join(worker_dir, 'custom_make.txt')
+  custom_make = 'custom_make.txt'
   if os.path.exists(custom_make):
     with open(custom_make, 'r') as m:
       make_cmd = m.read().strip()
@@ -160,7 +165,7 @@ def kill_process(p):
     p.kill()
 
 def adjust_tc(tc, base_nps, concurrency):
-  factor = 1600000.0 / base_nps
+  factor = 2000000.0 / base_nps
   if base_nps < 700000:
     sys.stderr.write('This machine is too slow to run fishtest effectively - sorry!\n')
     sys.exit(1)

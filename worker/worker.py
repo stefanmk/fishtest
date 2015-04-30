@@ -25,7 +25,7 @@ def setup_config_file(config_file):
   config.read(config_file)
 
   defaults = [('login', 'username', ''), ('login', 'password', ''),
-              ('parameters', 'host', 'fishtest.shredderchess.com'),
+              ('parameters', 'host', 'localhost'),
               ('parameters', 'port', '80'),
               ('parameters', 'concurrency', '3')]
 
@@ -162,7 +162,7 @@ def main():
   global ALIVE
   while ALIVE:
     if not success:
-      time.sleep(300)
+      time.sleep(60)
     success = worker(worker_info, args[1], remote)
 
 if __name__ == '__main__':

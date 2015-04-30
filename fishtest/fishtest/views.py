@@ -203,8 +203,12 @@ def regression_data_delete(request):
 
 def get_sha(branch, repo_url):
   """Resolves the git branch to sha commit"""
+  
+  github_token = ""
+  with open('../github_token.txt') as f:
+    github_token = f.read().strip()
   api_url = repo_url.replace('https://github.com', 'https://api.github.com/repos')
-  commit = requests.get(api_url + '/commits/' + branch).json()
+  commit = requests.get(api_url + '/commits/' + branch, auth=(github_token, 'x-oauth-basic')).json()
   if 'sha' in commit:
     return commit['sha'], commit['commit']['message'].split('\n')[0]
   else:
