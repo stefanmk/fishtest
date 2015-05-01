@@ -522,8 +522,11 @@ def format_results(run_results, run):
       state = 'rejected'
     elif los > 0.95:
       state = 'accepted'
-
-  result['info'].append('Total: %d W: %d L: %d D: %d' % (sum(WLD), WLD[0], WLD[1], WLD[2]))
+      
+  percent = ""
+  if sum(WLD) > 0:
+     percent = "{:4.2F}%".format(100.0*(WLD[0] + WLD[2]/2.0)/sum(WLD))
+  result['info'].append('T: %d W: %d L: %d D: %d  %s' % (sum(WLD), WLD[0], WLD[1], WLD[2], percent))
 
   if state == 'rejected':
     if WLD[0] > WLD[1]:
