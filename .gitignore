@@ -5,3 +5,4 @@ fishtest/build
 fishtest/fishtest.egg-info
 worker/fishtest.cfg
 github_token.txt
+worker/testing/*
