@@ -713,9 +713,9 @@ def post_result(run):
   msg['From'] = 'fishtest@noreply.github.com'
   msg['To'] = 'fishcooking_results@googlegroups.com'
 
-  s = smtplib.SMTP('localhost')
-  s.sendmail(msg['From'], [msg['To']], msg.as_string())
-  s.quit()
+  #s = smtplib.SMTP('localhost')
+  #s.sendmail(msg['From'], [msg['To']], msg.as_string())
+  #s.quit()
 
 @view_config(route_name='tests', renderer='tests.mak')
 @view_config(route_name='tests_user', renderer='tests.mak')
