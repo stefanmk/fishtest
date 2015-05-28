@@ -42,7 +42,7 @@ def is_64bit():
     return is_windows_64bit()
   return '64' in platform.architecture()[0]
 
-HTTP_TIMEOUT = 5.0
+HTTP_TIMEOUT = 30.0
 
 FISHCOOKING_URL = 'https://github.com/mcostalba/FishCooking'
 ARCH = 'ARCH=x86-64-modern' if is_64bit() else 'ARCH=x86-32'
