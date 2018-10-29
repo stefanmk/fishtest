@@ -79,6 +79,8 @@ def verify_signature(engine, signature, remote, payload, concurrency):
         bench_sig = line.split(': ')[1].strip()
       if 'Nodes/second' in line:
         bench_nps = float(line.split(': ')[1].strip())
+        
+    bench_nps = 1000000 # to get a value with the new bench command
 
     p.wait()
     if p.returncode != 0:
